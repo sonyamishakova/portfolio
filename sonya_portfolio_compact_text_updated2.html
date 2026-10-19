@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sonya Mishakova | Digital Artist Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Great+Vibes&family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+  <style>
+    :root { --purple: #712ce1; --green: #a4c54f; --dark: #171517; --white: #fff; }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; font-family: 'Montserrat', sans-serif; background: linear-gradient(#8a8a8a, #0a0a0a); color: var(--white); min-height: 100vh; }
+    header { min-height: 100vh; position: relative; background: url('me3.png') center/cover no-repeat; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; overflow: hidden; padding: 40px 20px; }
+    .overlay { position: absolute; inset: 0; background: rgba(46, 46, 46, 0.242); z-index: 1; }
+    header h1 { font-family: 'Great Vibes', cursive; font-size: clamp(4rem, 12vw, 11rem); color: #fff; margin: 0; position: relative; z-index: 2; font-weight: 400; }
+    header h2 { font-size: clamp(1.5rem, 5vw, 4rem); font-weight: 400; margin-top: 10px; position: relative; z-index: 2; }
+    .scroll-link { position: relative; z-index: 2; margin-top: 35px; color: white; text-decoration: none; border: 1px solid white; padding: 13px 25px; border-radius: 30px; transition: background .3s,color .3s; }
+    .scroll-link:hover { background: white; color: var(--purple); }
+    .about-box { width: 100%; max-width: 1400px; padding: 35px; border-radius: 20px; background: rgba(255, 255, 255, 0); }
+    .about-box h2, .section-heading { font-family: 'Great Vibes', cursive; font-size: clamp(3rem,6vw,6rem); font-weight: 400; margin: 0 0 20px; }
+    .about-box p { font-size: clamp(1rem,1.3vw,1.4rem); line-height: 1.8; margin: 0; }
+    .portfolio { padding: 40px 5% 90px; max-width: 1800px; margin: auto; }
+    .section-heading { text-align: center; margin-bottom: 15px; }
+    .section-intro { text-align: center; font-size: 1.1rem; line-height: 1.7; margin: 0 auto 45px; max-width: 700px; }
+    .category-grid { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 25px; }
+    .category-card { position: relative; min-height: 300px; border: 1px solid rgba(255,255,255,.4); border-radius: 18px; overflow: hidden; cursor: pointer; background: rgba(30,20,30,.4); color: white; font-family: inherit; text-align: left; padding: 0; transition: transform .3s,box-shadow .3s; }
+    .category-card:hover,.category-card:focus-visible { transform: translateY(-7px); box-shadow: 0 12px 30px rgba(0,0,0,.2); outline: 2px solid white; outline-offset: 3px; }
+    .category-image { position: absolute; inset: 0; display: flex; align-items: flex-end; padding: 25px; background: linear-gradient(0deg,rgba(0,0,0,.9),rgba(0,0,0,.08)); }
+    .pixel-cover { background-image: linear-gradient(0deg,rgba(0,0,0,.9),rgba(0,0,0,.08)),url('diver_pixel.png'); background-position: center; background-size: cover; }
+    .illustration-cover { background-image: linear-gradient(0deg,rgba(0,0,0,.9),rgba(0,0,0,.08)),url('silhouettes.png'); background-position: center; background-size: cover; }
+    .design-cover { background-image: linear-gradient(0deg,rgba(0,0,0,.9),rgba(0,0,0,.08)),url('BookCvrDesignSM.png'); background-position: center; background-size: cover; }
+    .category-text { position: relative; z-index: 1; }
+    .category-text h3 { font-size: clamp(1.5rem,2.5vw,2.2rem); margin: 0 0 10px; }
+    .category-text p { margin: 0; font-size: .95rem; line-height: 1.6; }
+    .category-arrow { display: inline-block; margin-top: 15px; font-size: .95rem; font-weight: 600; }
+    .artwork-section { display: none; animation: fadeIn .35s ease; }
+    .artwork-section.active { display: block; }
+    @keyframes fadeIn { from {opacity:0;transform:translateY(10px)} to {opacity:1;transform:translateY(0)} }
+    .back-button { border: 1px solid rgba(255,255,255,.7); background: rgba(0,0,0,.15); color: white; padding: 12px 20px; border-radius: 30px; font-family: inherit; font-size: 1rem; cursor: pointer; margin-bottom: 30px; }
+    .back-button:hover { background: rgba(0,0,0,.35); }
+    .category-title { font-size: clamp(2rem,5vw,3.5rem); margin: 0 0 10px; }
+    .category-subtitle { margin: 0 0 35px; line-height: 1.7; }
+    .gallery { display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 25px; }
+    .card { background: rgba(26,25,25,.65); border-radius: 12px; overflow: hidden; cursor: pointer; transition: transform .25s,box-shadow .25s; min-width: 0; }
+    .card:hover,.card:focus-visible { transform: translateY(-5px); box-shadow: 0 10px 25px rgba(0,0,0,.2); outline: 2px solid white; }
+    .card img { width: 100%; height: 340px; object-fit: contain; display: block; background: rgba(0,0,0,.12); }
+    .card img.pixel-art { image-rendering: pixelated; image-rendering: crisp-edges; }
+    .card img.image-missing { min-height: 150px; padding: 20px; background: rgba(0,0,0,.2); }
+    .card-title { padding: 5px 8px 6px; text-align: center; font-size: .9rem; line-height: 1.15; font-weight: 600; overflow-wrap: anywhere; min-height: 0; }
+    .modal { display: none; position: fixed; inset: 0; padding: 25px; background: rgba(0,0,0,.92); justify-content: center; align-items: center; z-index: 100; }
+    .modal.active { display: flex; }
+    .modal-content { display: flex; width: 100%; max-width: 1100px; max-height: 85vh; background: #171517; border-radius: 12px; overflow: auto; position: relative; }
+    .modal-media { width: 65%; min-width: 0; display: flex; align-items: center; justify-content: center; padding: 20px; }
+    .modal-media img,.modal-media iframe { max-width: 100%; max-height: 75vh; object-fit: contain; border: none; }
+    .modal-media img.pixel-art { image-rendering: pixelated; image-rendering: crisp-edges; }
+    .info { padding: 30px; width: 35%; overflow-y: auto; overflow-wrap: anywhere; }
+    .info h2 { font-size: 1.7rem; line-height: 1.3; margin-top: 25px; }
+    .info p { font-size: 1rem; line-height: 1.8; }
+    .close { position: absolute; top: 12px; right: 20px; z-index: 2; font-size: 35px; cursor: pointer; color: white; background: none; border: none; line-height: 1; }
+    footer { text-align: center; padding: 30px 20px; background: rgba(0,0,0,.15); line-height: 1.7; }
+    @media(max-width:900px) { .card img { height: 290px; } .category-grid,.gallery { grid-template-columns: repeat(2,minmax(0,1fr)); } .category-card { min-height: 250px; } .modal-content { flex-direction: column; } .modal-media,.info { width: 100%; } .modal-media img,.modal-media iframe { max-height: 50vh; } .info { padding: 20px 25px; } .info h2 { margin-top: 10px; } }
+    @media(max-width:550px) { .card img { height: 300px; } .category-grid,.gallery { grid-template-columns: 1fr; } .category-card { min-height: 230px; } .about-box { padding: 25px; } .portfolio { padding-left: 20px; padding-right: 20px; } .modal { padding: 12px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="overlay"></div>
+    <h1>Sonya Mishakova</h1>
+    <h2>Digital Artist Portfolio</h2>
+  </header>
+
+  <section class="about" id="about">
+    <div class="about-box">
+      <h2>                    About Me</h2>
+      <p>Hi! I am a Game Design student and digital artist with a lifelong passion for visual storytelling.<br><br>
+      I started with traditional drawing and gradually transitioned into digital art, exploring character design, illustration, and animation along the way.<br><br>
+      While I study game design, I naturally gravitate toward the visual and artistic side of development, especially character design, aesthetics, and world-building. I enjoy shaping the look and feel of interactive experiences and bringing ideas to life visually. I am experienced with tools like Adobe Suite, Krita, Procreate, Aseprite, Pixelorama and other softwares.</p>
+    </div>
+  </section>
+
+  <main class="portfolio" id="portfolio">
+    <h2 class="section-heading">My Work</h2>
+    <p class="section-intro" id="section-intro">Click on each category! :3</p>
+    <div class="category-grid" id="category-grid">
+      <button class="category-card" onclick="showCategory('pixel-art')"><div class="category-image pixel-cover"><div class="category-text"><h3>Pixel Art</h3><p>Sprites, animations, environments, and game assets.</p><span class="category-arrow"> →</span></div></div></button>
+      <button class="category-card" onclick="showCategory('illustrations')"><div class="category-image illustration-cover"><div class="category-text"><h3>Illustrations</h3><p>Character art, digital illustrations, and portraits.</p><span class="category-arrow"> →</span></div></div></button>
+      <button class="category-card" onclick="showCategory('graphic-design')"><div class="category-image design-cover"><div class="category-text"><h3>Graphic Design</h3><p>Visual concepts, graphic compositions, and design projects.</p><span class="category-arrow"> →</span></div></div></button>
+    </div>
+
+    <section class="artwork-section" id="pixel-art">
+      <button class="back-button" onclick="showCategories()">← All Categories</button>
+      <h2 class="category-title">Pixel Art</h2><p class="category-subtitle">Sprites, animations, environments, and game assets.</p>
+      <div class="gallery">
+        <article class="card" tabindex="0" role="button" aria-label="View Diver" onclick="openModal('diver_pixel.png', 'Diver', 
+          'Pixelorama | 2025 | Digital artwork')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('diver_pixel.png', 'Diver', 'Digital artwork')}">
+          <img class="pixel-art" src="diver_pixel.png" alt="Diver" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Diver</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Shark Attack" onclick="openModal('shark_attack.gif', 'Shark Attack', 
+          'Pixelorama | 2025 | Pixel art animation.')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('shark_attack.gif', 'Shark Attack', 'Digital artwork')}">
+          <img class="pixel-art" src="shark_attack.gif" alt="Shark Attack" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Shark Attack</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Shark Death Transformation" onclick="openModal('shark_death_transform.gif', 'Shark Death Transformation', 
+          'Pixelorama | 2025 | Pixel art animation.')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('shark_death_transform.gif', 'Shark Death Transformation', 'Digital artwork')}">
+          <img class="pixel-art" src="shark_death_transform.gif" alt="Shark Death Transformation" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Shark Death Transformation</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Map Tiles" onclick="openModal('TileMaps.png', 'Map Tiles', 
+        'Pixelorama | 2025 | Digital artwork')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('TileMaps.png', 'Map Tiles', 'Digital artwork')}">
+          <img class="pixel-art" src="TileMaps.png" alt="Map Tiles" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">UH20 Map Tiles</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Weapon Death" onclick="openModal('weapon_death.gif', 'Weapon Death', 
+          'Pixelorama | 2025 | Pixel art animation.' )" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('weapon_death.gif', 'Weapon Death', 'Digital artwork')}">
+          <img class="pixel-art" src="weapon_death.gif" alt="Weapon Death" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Weapon Death</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Weapon Walk" onclick="openModal('weapon_walk.gif', 'Weapon Walk', 
+        'Pixelorama | 2025 | Pixel art animation.')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('weapon_walk.gif', 'Weapon Walk', 'Digital artwork')}">
+          <img class="pixel-art" src="weapon_walk.gif" alt="Weapon Walk" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Weapon Walk</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Swim" onclick="openModal('swim.gif', 'Swim',
+  'Pixelorama | 2025 | Pixel art animation.')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('swim.gif', 'Swim', 'Pixel art animation')}">
+          <img class="pixel-art" src="swim.gif" alt="Swim" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Swim</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Walk Attack" onclick="openModal('walk_attack.gif', 'Walk Attack', 
+        'Pixelorama | 2025 | Pixel art animation.')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('walk_attack.gif', 'Walk Attack', 'Pixel art animation')}">
+          <img class="pixel-art" src="walk_attack.gif" alt="Walk Attack" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Walk Attack</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="artwork-section" id="illustrations">
+      <button class="back-button" onclick="showCategories()">← All Categories</button>
+      <h2 class="category-title">Illustrations</h2><p class="category-subtitle">Character art, portraits, and digital illustrations.</p>
+      <div class="gallery">
+        <article class="card" tabindex="0" role="button" aria-label="View Morgana" onclick="openModal('morgana.png', 'Morgana', 
+        'Krita | 2025 | Digital artwork')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('morgana.png', 'Morgana', 'Digital artwork')}">
+          <img src="morgana.png" alt="Morgana" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Morgana</div>
+        </article>
+
+        <article class="card" tabindex="0" role="button" aria-label="View Pierrot" onclick="openModal('pierro.png', 'Pierrot', 
+        ' Adobe Photoshop | 2025 | Digital artwork')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('pierro.png', 'Pierrot', 'Digital artwork')}">
+          <img src="pierro.png" alt="Pierrot" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Pierrot</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Portrait" onclick="openModal('portrait1.png', 'Portrait', 
+        'Krita | 2024 | Digital artwork')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('portrait1.png', 'Portrait', 'Digital artwork')}">
+          <img src="portrait1.png" alt="Portrait" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Portrait</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Regina" onclick="openModal('regina.png', 'Regina', 
+        ' Adobe Photoshop | 2025 | Digital artwork')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('regina.png', 'Regina', 'Digital artwork')}">
+          <img src="regina.png" alt="Regina" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Regina</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Vampire" onclick="openModal('vamp1.png', 'Vampire', 
+        'Krita | 2026 | Digital artwork')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('vamp1.png', 'Vampire', 'Digital artwork')}">
+          <img src="vamp1.png" alt="Vampire" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Vampire</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Chappell Roan" onclick="openModal('chappelroan.png', 'Chappell Roan', 
+        'Krita | 2026 | Digital artwork')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('chappelroan.png', 'Chappell Roan', 'Digital artwork')}">
+          <img src="chappelroan.png" alt="Chappell Roan" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Chappell Roan</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Dictatorship" onclick="openModal('dictatorship.png', 'Dictatorship', 
+        'Adobe Illustrator | 2025 | Digital artwork')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('dictatorship.png', 'Dictatorship', 'Digital artwork')}">
+          <img src="dictatorship.png" alt="Dictatorship" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Dictatorship</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Silhouettes" onclick="openModal('silhouettes.png', 'Silhouettes', 
+        ' Adobe Photoshop | 2026 | Character design')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('silhouettes.png', 'Silhouettes', 'Digital artwork')}">
+          <img src="silhouettes.png" alt="Silhouettes" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Silhouettes</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Character Illustration" onclick="openModal('character.jpg', 'Character Illustration', 
+        'Adobe Illustartor | 2025 | Digital artwork')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('character.jpg', 'Character Illustration', 'Digital artwork')}">
+          <img src="character.jpg" alt="Character Illustration" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Character Illustration</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Coraline" onclick="openModal('coralineim.png', 'Coraline', 
+        'Krita | 2024 | Digital artwork')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('coralineim.png', 'Coraline', 'Digital artwork')}">
+          <img src="coralineim.png" alt="Coraline" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Coraline</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Goth" onclick="openModal('goth.png', 'Goth', 
+        ' Krita | 2024 | Digital artwork')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('goth.png', 'Goth', 'Digital artwork')}">
+          <img src="goth.png" alt="Goth" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Goth</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Storyboard" onclick="openModal('StoryBoardSonya.png', 'Storyboard', 
+        'Adobe Photoshop | 2026 | Story Board')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('StoryBoardSonya.png', 'Storyboard', 'Digital artwork')}">
+          <img src="StoryBoardSonya.png" alt="Storyboard" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Storyboard</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="artwork-section" id="graphic-design">
+      <button class="back-button" onclick="showCategories()">← All Categories</button>
+      <h2 class="category-title">Graphic Design</h2><p class="category-subtitle">Visual communication, layouts, and creative design projects.</p>
+      <div class="gallery">
+        <article class="card" tabindex="0" role="button" aria-label="View Book Cover Design" onclick="openModal('BookCvrDesignSM.png', 'Book Cover Design', 
+        'Adobe Illustrator | 2026 | Graphic Design')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('BookCvrDesignSM.png', 'Book Cover Design', 'Digital artwork')}">
+          <img src="BookCvrDesignSM.png" alt="Book Cover Design" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Book Cover Design</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Typography Design" onclick="openModal('TypographyfinalSM.png', 'Typography Design', 
+        'Adobe Illustrator | 2026 | Graphic Design')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('TypographyfinalSM.png', 'Typography Design', 'Digital artwork')}">
+          <img src="TypographyfinalSM.png" alt="Typography Design" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Typography Design</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Poster Design — Square" onclick="openModal('FGPoster1x1.png', 'Poster Design — Square', 
+        'Canva | 2026 | Graphic Design')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('FGPoster1x1.png', 'Poster Design — Square', 'Digital artwork')}">
+          <img src="FGPoster1x1.png" alt="Poster Design — Square" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Poster Design — Square</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Poster Design — Story" onclick="openModal('FGPosterStory.png', 'Poster Design — Story', 
+        'Canva | 2026 | Graphic Design')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('FGPosterStory.png', 'Poster Design — Story', 'Digital artwork')}">
+          <img src="FGPosterStory.png" alt="Poster Design — Story" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Poster Design — Story</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View International Camp Design" onclick="openModal('InternationalCampGimnastika.png', 'International Camp Design', 
+        'Canva | 2026 | Graphic Design')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('InternationalCampGimnastika.png', 'International Camp Design', 'Digital artwork')}">
+          <img src="InternationalCampGimnastika.png" alt="International Camp Design" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">International Camp Design</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Brochure 1" onclick="openModal('Brochure1.png', 'Brochure 1', 
+        'Adobe Illustrator | 2026 | Graphic Design')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('Brochure1.png', 'Brochure 1', 'Digital artwork')}">
+          <img src="Brochure1.png" alt="Brochure 1" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Brochure 1</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Brochure 2" onclick="openModal('Brochure2.png', 'Brochure 2', 
+        'Adobe Illustrator | 2026 | Graphic Design')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('Brochure2.png', 'Brochure 2', 'Digital artwork')}">
+          <img src="Brochure2.png" alt="Brochure 2" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Brochure 2</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Advertising Banner 1" onclick="openModal('ads_banner_1.png', 'Advertising Banner 1', 
+        'Adobe Illustrator | 2025 | Graphic Design')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('ads_banner_1.png', 'Advertising Banner 1', 'Digital artwork')}">
+          <img src="ads_banner_1.png" alt="Advertising Banner 1" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Advertising Banner 1</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Advertising Banner 2" onclick="openModal('ads_banner_2.png', 'Advertising Banner 2', 
+        'Adobe Illustrator | 2025 | Graphic Design')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('ads_banner_2.png', 'Advertising Banner 2', 'Digital artwork')}">
+          <img src="ads_banner_2.png" alt="Advertising Banner 2" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Advertising Banner 2</div>
+        </article>
+        <article class="card" tabindex="0" role="button" aria-label="View Advertising Banner 3" onclick="openModal('ads_banner_3.png', 'Advertising Banner 3', 
+          'Adobe Illustrator | 2025 | Graphic Design')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();openModal('ads_banner_3.png', 'Advertising Banner 3', 'Digital artwork')}">
+          <img src="ads_banner_3.png" alt="Advertising Banner 3" loading="lazy" onerror="this.classList.add('image-missing')">
+          <div class="card-title">Advertising Banner 3</div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal" id="modal" onclick="closeModalOnBackground(event)" role="dialog" aria-modal="true" aria-label="Artwork details">
+    <div class="modal-content">
+      <button class="close" onclick="closeModal()" aria-label="Close artwork popup">&times;</button>
+      <div class="modal-media" id="modal-media"></div>
+      <div class="info" id="modal-info"></div>
+    </div>
+  </div>
+
+  <footer><p>Sonya Mishakova | Digital Artist Portfolio</p></footer>
+
+  <script>
+    function showCategory(categoryId) {
+      document.getElementById('category-grid').style.display = 'none';
+      document.getElementById('section-intro').style.display = 'none';
+      document.querySelectorAll('.artwork-section').forEach(section => section.classList.remove('active'));
+      document.getElementById(categoryId).classList.add('active');
+      document.getElementById('portfolio').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function showCategories() {
+      document.querySelectorAll('.artwork-section').forEach(section => section.classList.remove('active'));
+      document.getElementById('category-grid').style.display = 'grid';
+      document.getElementById('section-intro').style.display = 'block';
+      document.getElementById('portfolio').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+
+    function openModal(src, title, info) {
+      const modal = document.getElementById('modal');
+      const media = document.getElementById('modal-media');
+      const details = document.getElementById('modal-info');
+      media.replaceChildren();
+      details.replaceChildren();
+      const extension = src.split('?')[0].split('.').pop().toLowerCase();
+      if (extension === 'pdf') {
+        const frame = document.createElement('iframe');
+        frame.src = src; frame.title = title; frame.width = '100%'; frame.height = '600';
+        media.appendChild(frame);
+      } else {
+        const image = document.createElement('img');
+        image.src = src; image.alt = title;
+        if (extension === 'gif' || title.toLowerCase().includes('pixel')) image.classList.add('pixel-art');
+        media.appendChild(image);
+      }
+      const heading = document.createElement('h2');
+      heading.textContent = title;
+      const paragraph = document.createElement('p');
+      paragraph.textContent = info;
+      details.append(heading, paragraph);
+      modal.classList.add('active');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function closeModal() {
+      document.getElementById('modal').classList.remove('active');
+      document.getElementById('modal-media').replaceChildren();
+      document.body.style.overflow = '';
+    }
+
+    function closeModalOnBackground(event) {
+      if (event.target === document.getElementById('modal')) closeModal();
+    }
+
+    document.addEventListener('keydown', event => {
+      if (event.key === 'Escape') closeModal();
+    });
+
+    window.addEventListener('scroll', () => {
+      const header = document.querySelector('header');
+      if (window.scrollY < header.offsetHeight) {
+        header.style.backgroundPosition = `center calc(50% + ${window.scrollY * 0.3}px)`;
+      }
+    });
+  </script>
+</body>
+</html>
